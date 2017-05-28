@@ -1,11 +1,5 @@
 
-// the setup function runs once when you press reset or power the board
-void setup() {
-  // initialize digital pin LED_BUILTIN as an output.
-  pinMode(LED_BUILTIN, OUTPUT);
-  Serial.begin(9600);
-}
-
+#define ADC_PIN   A0
 
 #define MIN_LEVEL 1
 #define LED_LEVEL 20
@@ -17,6 +11,15 @@ unsigned long preCurMillis = 0;
 unsigned long curMillis = 0;
 unsigned long preInterMillis = 0;
 
+
+// the setup function runs once when you press reset or power the board
+void setup() {
+  // initialize digital pin LED_BUILTIN as an output.
+  pinMode(LED_BUILTIN, OUTPUT);
+  Serial.begin(9600);
+}
+
+
 void setHigh(int holdingTime){
   if(holdingTime == 0)  return;
   digitalWrite(LED_BUILTIN,HIGH);
@@ -24,15 +27,18 @@ void setHigh(int holdingTime){
 }
 
 void loop() {
+  int input = analogRead(ADC_PIN);
+  int speed = map(input, 0, 1023, 1, 100);
+  
   for(int i=0;i<=LED_LEVEL;i++)
   {
     curMillis = millis();
-    while(curMillis - preInterMillis < SPEED){
+    while(curMillis - preInterMillis < speed){
       curMillis = millis();
       digitalWrite(LED_BUILTIN,LOW);
       if(curMillis - preCurMillis > FREQUENCY){
         int k = MIN_LEVEL + (1-cos(PI*.5f*(i/(float)LED_LEVEL))) * (LED_LEVEL-MIN_LEVEL);
-//        Serial.println(k);
+        Serial.println(k);
         setHigh(k);
         preCurMillis = curMillis;
       }
@@ -44,7 +50,7 @@ void loop() {
   for(int i=LED_LEVEL;i>=0;i--)
   {
     curMillis = millis();
-    while(curMillis - preInterMillis < SPEED){
+    while(curMillis - preInterMillis < speed){
       curMillis = millis();
       digitalWrite(LED_BUILTIN,LOW);
       if(curMillis - preCurMillis > FREQUENCY){
