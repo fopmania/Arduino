@@ -1,6 +1,13 @@
 #include <IRDump.h>
 
 #define PIN_IR_OUTPUT 3
+#define PIN_FORWARD   4
+#define PIN_LEFT      5
+#define PIN_RIGHT     6
+#define PIN_SHOOTING  7
+
+
+
 #define SIGN_COUNT    14
 
 #define NUM_END_SUGN 8      
@@ -123,10 +130,15 @@ void setup() {
   Serial.begin(9600);
   irdumper = new IRDump();
 
+  pinMode(PIN_FORWARD, INPUT);
+  pinMode(PIN_LEFT, INPUT);
+  pinMode(PIN_RIGHT, INPUT);
+  pinMode(PIN_SHOOTING, INPUT);
+
 
   // print help
-  Serial.println("TestHexBugController: starting...");
-  Serial.println("Commands Include: ");
+  Serial.println("TestHexBug IR Controller.");
+  Serial.println("Commands list: ");
   Serial.println("    'w' = Forward");
   Serial.println("    'a' = Left");
   Serial.println("    'd' = Right");
@@ -134,32 +146,82 @@ void setup() {
   
 }
 
+void emitInfrared(unsigned int *p) {
+  irdumper->Emit(PIN_IR_OUTPUT, p, 38);
+  delay(100);
+}
+
+bool checkAnyAction(){
+  if(digitalRead(PIN_FORWARD) == HIGH){
+    return true;     
+  }
+  else if(digitalRead(PIN_SHOOTING) == HIGH){
+    return true;     
+  }
+  else if(digitalRead(PIN_LEFT) == HIGH){
+    return true;     
+  }
+  else if(digitalRead(PIN_RIGHT) == HIGH){
+    return true;     
+  }
+  return false;
+}
+
+void doEndAction() {
+  for(int i = 0; i < NUM_END_SUGN; i++){
+    if(checkAnyAction()){
+        return;
+    }
+    irdumper->Emit(PIN_IR_OUTPUT, signalEnd[i], 38);
+    delay(100);
+  }
+  Serial.println("End Action");
+}
+
+bool doAction(){
+  while(digitalRead(PIN_FORWARD) == HIGH){
+    Serial.println("Forward");
+    emitInfrared((unsigned int *)signalF);
+    return true;
+  }
+  while(digitalRead(PIN_SHOOTING) == HIGH){
+    Serial.println("Shooting");
+    emitInfrared((unsigned int *)signalS);
+    return true;
+  }
+  while(digitalRead(PIN_LEFT) == HIGH){
+    Serial.println("Left");
+    emitInfrared((unsigned int *)signalL);
+    return true;
+  }
+  while(digitalRead(PIN_RIGHT) == HIGH){
+    Serial.println("Right");
+    emitInfrared((unsigned int *)signalR);
+    return true;
+  }
+  return false;
+}
 
 void loop() {
-}
-
-void doAction(unsigned int *p) {
-  Serial.println("Emit");
-  irdumper->Emit(PIN_IR_OUTPUT, p, 38);
-  for(int i = 0; i < NUM_END_SUGN; i++){
-    delay(100);
-    irdumper->Emit(PIN_IR_OUTPUT, signalEnd[i], 38);
+  if(doAction()){  //  do finish action.
+    doEndAction();
   }
 }
- 
+
 void serialEvent() {
+
   while (Serial.available()) {
     char inChar = (char)Serial.read();
     Serial.print("Received "); Serial.println(inChar);
     switch (inChar) {
      case 'w':
-       doAction((unsigned int *)signalF); break;
+       emitInfrared((unsigned int *)signalF); break;
      case 'a':
-       doAction((unsigned int *)signalL); break;
+       emitInfrared((unsigned int *)signalL); break;
      case 'd':
-       doAction((unsigned int *)signalR); break;
+       emitInfrared((unsigned int *)signalR); break;
      case 's':
-       doAction((unsigned int *)signalS); break;
+       emitInfrared((unsigned int *)signalS); break;
      }
   }
 }
