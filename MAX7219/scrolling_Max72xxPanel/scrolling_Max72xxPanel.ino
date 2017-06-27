@@ -16,7 +16,7 @@ int width = 5 + spacer; // The font width is 5 pixels
 
 void setup() {
 
-  matrix.setIntensity(7); // Use a value between 0 and 15 for brightness
+  matrix.setIntensity(1); // Use a value between 0 and 15 for brightness
 
 // Adjust to your own needs
 //  matrix.setPosition(0, 0, 0); // The first display is at <0, 0>
