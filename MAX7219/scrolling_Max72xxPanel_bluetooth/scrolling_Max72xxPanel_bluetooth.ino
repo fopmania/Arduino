@@ -41,8 +41,6 @@ int wait = 20; // In milliseconds
 int spacer = 1;
 int width = 5 + spacer; // The font width is 5 pixels
 int brightness = 7;
-int scrollSpeed = 100;
-
 
 //  buzzer sound  
 
@@ -142,8 +140,9 @@ void readBuletooth(){
     // Adjusting the Scrolling Speed
     else if (indicator == '2') {
       String sS = Bluetooth.readString();
-      scrollSpeed = 150 - sS.toInt(); // Milliseconds, subtraction because lower value means higher scrolling speed
-      Serial.write( scrollSpeed );
+      wait = sS.toInt(); // Milliseconds, subtraction because lower value means higher scrolling speed
+      wait = wait < 0 ? 0 : ( wait > 1000 ? 1000 : wait); 
+      Serial.write( wait );
       ohhh();
     }
     // Adjusting the brightness

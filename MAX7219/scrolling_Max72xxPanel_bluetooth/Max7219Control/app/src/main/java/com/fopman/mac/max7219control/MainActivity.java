@@ -122,6 +122,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onClickSpeed(View view) {
+        if(thConnect != null){
+            thConnect.write("2" + sbSpeed.getProgress() );
+        }
     }
 
     public void onClickBluetoothOn(View view) {
