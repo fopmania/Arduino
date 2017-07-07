@@ -10,7 +10,25 @@
 #define PIN_TX 2
 #define PIN_RX 3  
 #define PIN_SPEAKER 8 
+/*  AT commands.
+1. AT+NAME=CSK // (YOUR NAME)
 
+2. AT+UART=57600,0,0 //( speed, STOP BIT, PARITY BIT)
+
+3. AT+ROLE=1 (0 = SLAVE, 1= MASTER)
+
+4. AT+PSWD=1234 OR (0000) <-- 반드시 PIN번호가 맞아야 페어링 됨
+
+5. AT+CMODE=0
+
+6. AT+BIND=XXXX,YY,ZZZZZZ (Mindwave Unique Number)
+
+7. AT+IAC=9E8B33  // DEFAULT  
+
+8. AT+CLASS=0
+
+9. AT+INQM=1,9,48
+*/
 int numberOfHorizontalDisplays = 4;
 int numberOfVerticalDisplays = 1;
 
@@ -56,6 +74,27 @@ void squeak() {
     beep(PIN_SPEAKER,i,20);
   }
 }
+void catcall() {
+  for (int i=1000; i<5000; i=i*1.05) {
+    beep(PIN_SPEAKER,i,10);
+  }
+ delay(300);
+ 
+  for (int i=1000; i<3000; i=i*1.03) {
+    beep(PIN_SPEAKER,i,10);
+  }
+  for (int i=3000; i>1000; i=i*.97) {
+    beep(PIN_SPEAKER,i,10);
+  }
+}
+void ohhh() {
+  for (int i=1000; i<2000; i=i*1.02) {
+    beep(PIN_SPEAKER,i,10);
+  }
+  for (int i=2000; i>1000; i=i*.98) {
+    beep(PIN_SPEAKER,i,10);
+  }
+}
 
 
 void setup() {
@@ -64,7 +103,7 @@ void setup() {
 
   matrix.setIntensity(brightness); // Use a value between 0 and 15 for brightness
   pinMode(PIN_SPEAKER, OUTPUT);
-  squeak();
+  catcall();
 
 // Adjust to your own needs
 //  matrix.setPosition(0, 0, 0); // The first display is at <0, 0>
@@ -73,7 +112,10 @@ void setup() {
 //  matrix.setPosition(3, 3, 0); // And the last display is at <3, 0>
 //  ...
 //  matrix.setRotation(0, 1);    // The first display is position upside down
-//  matrix.setRotation(3, 2);    // The same hold for the last display
+  matrix.setRotation(0, 1);    // The same hold for the last display
+  matrix.setRotation(1, 1);    // The same hold for the last display
+  matrix.setRotation(2, 1);    // The same hold for the last display
+  matrix.setRotation(3, 1);    // The same hold for the last display
 }
 
 void readBuletooth(){
@@ -95,13 +137,14 @@ void readBuletooth(){
       }
       Serial.write( message );
       tape = message;
-      squeak();
+      catcall();
     }
     // Adjusting the Scrolling Speed
     else if (indicator == '2') {
       String sS = Bluetooth.readString();
       scrollSpeed = 150 - sS.toInt(); // Milliseconds, subtraction because lower value means higher scrolling speed
       Serial.write( scrollSpeed );
+      ohhh();
     }
     // Adjusting the brightness
     else if (indicator == '3') {
@@ -109,6 +152,7 @@ void readBuletooth(){
       brightness = sB.toInt();
       matrix.setIntensity(brightness); // Use a value between 0 and 15 for brightness
       Serial.write( brightness );
+      squeak();
     }
   }
   if ( Serial.available() ) {

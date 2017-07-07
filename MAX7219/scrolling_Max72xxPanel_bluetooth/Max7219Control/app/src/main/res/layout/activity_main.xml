@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.fopman.mac.max7219control.MainActivity">
+
+    <TextView
+        android:id="@+id/txtReceive"
+        android:layout_width="276dp"
+        android:layout_height="23dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="13dp"
+        android:text="Message"
+        app:layout_constraintHorizontal_bias="0.111"
+        app:layout_constraintLeft_toRightOf="@+id/textView5"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/sbSpeed" />
+
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_width="59dp"
+        android:layout_height="20dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="13dp"
+        android:text="Receive"
+        android:textStyle="bold"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/sbSpeed" />
+
+    <TextView
+        android:id="@+id/txtStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:text="Bluetooth Status"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginLeft="16dp"
+        app:layout_constraintLeft_toLeftOf="parent" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:text="Message"
+        android:textStyle="bold"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtStatus" />
+
+    <EditText
+        android:id="@+id/txtMessage"
+        android:layout_width="277dp"
+        android:layout_height="45dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="5dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+    <Button
+        android:id="@+id/btnSend"
+        android:layout_width="75dp"
+        android:layout_height="43dp"
+        android:layout_marginLeft="0dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="4dp"
+        android:onClick="onClickSend"
+        android:text="SEND"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintLeft_toRightOf="@+id/txtMessage"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView"
+        tools:ignore="MissingConstraints" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="0dp"
+        android:text="Bright"
+        android:textStyle="bold"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtMessage" />
+
+    <SeekBar
+        android:id="@+id/sbBright"
+        android:layout_width="262dp"
+        android:layout_height="22dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="0dp"
+        android:max="15"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView2"
+        android:layout_marginStart="16dp" />
+
+    <Button
+        android:id="@+id/btBright"
+        android:layout_width="78dp"
+        android:layout_height="39dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
+        android:onClick="onClickBright"
+        android:text="Apply"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtMessage"
+        tools:ignore="MissingConstraints"
+        app:layout_constraintLeft_toRightOf="@+id/sbBright"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintHorizontal_bias="0.538" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="7dp"
+        android:text="Scroll speed"
+        android:textStyle="bold"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/sbBright"
+        tools:ignore="MissingConstraints" />
+
+    <SeekBar
+        android:id="@+id/sbSpeed"
+        android:layout_width="262dp"
+        android:layout_height="19dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="7dp"
+        android:max="100"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView3" />
+
+    <Button
+        android:id="@+id/btSpeed"
+        android:layout_width="74dp"
+        android:layout_height="38dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="24dp"
+        android:onClick="onClickSpeed"
+        android:text="Apply"
+        app:layout_constraintHorizontal_bias="0.529"
+        app:layout_constraintLeft_toRightOf="@+id/sbSpeed"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/sbBright"
+        tools:ignore="MissingConstraints" />
+
+    <Button
+        android:id="@+id/btBlueOn"
+        android:layout_width="149dp"
+        android:layout_height="37dp"
+        android:text="BLUETOOTH ON"
+        android:onClick="onClickBluetoothOn"
+        android:layout_marginStart="27dp"
+        android:layout_marginLeft="27dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@+id/textView5" />
+
+    <Button
+        android:id="@+id/btBlueOff"
+        android:layout_width="143dp"
+        android:layout_height="40dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="35dp"
+        android:onClick="onClickBluetoothOff"
+        android:text="BLUETOOTH OFF"
+        app:layout_constraintLeft_toRightOf="@+id/btBlueOn"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintHorizontal_bias="0.836"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@+id/txtReceive" />
+
+    <Button
+        android:id="@+id/btPaired"
+        android:layout_width="166dp"
+        android:layout_height="44dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
+        android:onClick="onCLickPaired"
+        android:text="SHOW PAIRED"
+        app:layout_constraintHorizontal_bias="0.039"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btBlueOn"
+        tools:ignore="MissingConstraints" />
+
+    <Button
+        android:id="@+id/btFind"
+        android:layout_width="160dp"
+        android:layout_height="42dp"
+        android:layout_marginTop="5dp"
+        android:onClick="onClickBluetoothFind"
+        android:text="FIND NEW DEVICES"
+        app:layout_constraintTop_toBottomOf="@+id/btBlueOff"
+        tools:ignore="MissingConstraints"
+        android:layout_marginRight="8dp"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintHorizontal_bias="0.692"
+        app:layout_constraintLeft_toRightOf="@+id/btPaired" />
+
+    <ListView
+        android:id="@+id/lvBluetooth"
+        android:layout_width="357dp"
+        android:layout_height="187dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.545"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btFind"
+        app:layout_constraintVertical_bias="0.0" />
+
+</android.support.constraint.ConstraintLayout>
