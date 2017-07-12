@@ -1,0 +1,5 @@
+sudo python esptool.py --port /dev/cu.usbserial-A50285BI write_flash 0x00000 nodemcu_integer_0.9.5_20150318.bin
+
+sudo python esptool.py --port /dev/cu.usbserial-A50285BI write_flash 0x00000 ai-thinker-0.9.5.2.bin
+
+sudo python esptool.py --port /dev/cu.usbserial-A50285BI write_flash 0x00000 ai-thinker-0.9.5.2-9600.bin
