@@ -28,6 +28,9 @@
 8. AT+CLASS=0
 
 9. AT+INQM=1,9,48
+
+AT+ROLE?
+AT+VERSION?
 */
 int numberOfHorizontalDisplays = 4;
 int numberOfVerticalDisplays = 1;
@@ -96,8 +99,8 @@ void ohhh() {
 
 
 void setup() {
-  Serial.begin(9600);
-  Bluetooth.begin(9600); // Default communication rate of the Bluetooth module
+  Serial.begin(38400);
+  Bluetooth.begin(38400); // Default communication rate of the Bluetooth module
 
   matrix.setIntensity(brightness); // Use a value between 0 and 15 for brightness
   pinMode(PIN_SPEAKER, OUTPUT);
@@ -116,13 +119,13 @@ void setup() {
   matrix.setRotation(3, 1);    // The same hold for the last display
 }
 
-void readBuletooth(){
+bool readBuletooth(){
   if (Bluetooth.available()) {   // Checks whether data is comming from the serial port
     char indicator = Bluetooth.read();   // Starts reading the serial port, the first byte from the incoming data
     Serial.write( indicator );
     // If we have pressed the "Send" button from the Android App, clear the previous text
     if (indicator == '1') {
-      char message[128];
+     char message[128];
       int cnt = 0;
       for (int i = 0; i < 100; i++) {
         message[i] = 0;
@@ -133,7 +136,7 @@ void readBuletooth(){
         message[cnt] = Bluetooth.read();
         cnt++;
       }
-      Serial.write( message );
+      Serial.println( message );
       tape = message;
       catcall();
     }
@@ -141,8 +144,10 @@ void readBuletooth(){
     else if (indicator == '2') {
       String sS = Bluetooth.readString();
       wait = sS.toInt(); // Milliseconds, subtraction because lower value means higher scrolling speed
-      wait = wait < 0 ? 0 : ( wait > 1000 ? 1000 : wait); 
-      Serial.write( wait );
+      wait = wait < 0 ? 0 : ( wait > 100 ? 100 : wait);
+      wait = 100 - wait; 
+      Serial.println( sS );
+//      Serial.write( wait );
       ohhh();
     }
     // Adjusting the brightness
@@ -150,17 +155,20 @@ void readBuletooth(){
       String sB = Bluetooth.readString();
       brightness = sB.toInt();
       matrix.setIntensity(brightness); // Use a value between 0 and 15 for brightness
-      Serial.write( brightness );
+      Serial.println( sB );
+//      Serial.write( brightness );
       squeak();
     }
+    return true;
   }
   if ( Serial.available() ) {
      Bluetooth.write( Serial.read() );
   }
+  return false;
 }
 
 void loop() {
-  readBuletooth();
+  if(readBuletooth()) return;
 
 
   for ( int i = 0 ; i < width * tape.length() + matrix.width() - 1 - spacer; i++ ) {
