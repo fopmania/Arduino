@@ -121,7 +121,7 @@ void setup() {
 
 bool readBuletooth(){
   if (Bluetooth.available()) {   // Checks whether data is comming from the serial port
-    char indicator = Bluetooth.read();   // Starts reading the serial port, the first byte from the incoming data
+    byte indicator = Bluetooth.read();   // Starts reading the serial port, the first byte from the incoming data
     Serial.write( indicator );
     // If we have pressed the "Send" button from the Android App, clear the previous text
     if (indicator == '\1') {
@@ -132,12 +132,13 @@ bool readBuletooth(){
         matrix.fillScreen(0);
       }
       // Read the whole data/string comming from the phone and put it into text[] array.
-      while (Bluetooth.available()) {
-        message[cnt] = Bluetooth.read();
-        cnt++;
-      }
-      Serial.println( message );
-      tape = message;
+//      String sS = Bluetooth.readString();
+//      while (Bluetooth.available()) {
+//        message[cnt] = Bluetooth.read();
+//        cnt++;
+//      }
+      tape = Bluetooth.readString();
+      Serial.println( tape );
       catcall();
     }
     // Adjusting the Scrolling Speed

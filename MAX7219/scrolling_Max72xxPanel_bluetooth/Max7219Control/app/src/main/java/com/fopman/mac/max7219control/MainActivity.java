@@ -111,18 +111,21 @@ public class MainActivity extends AppCompatActivity {
 
     public void onClickSend(View view) {
         if(thConnect != null){
+            txtStatus.setText("sent '"+ txtMessage.getText());
             thConnect.write("1" + txtMessage.getText());
         }
     }
 
     public void onClickBright(View view) {
         if(thConnect != null){
+            txtStatus.setText("sent a bright value");
             thConnect.write("3" + sbBright.getProgress() );
         }
     }
 
     public void onClickSpeed(View view) {
         if(thConnect != null){
+            txtStatus.setText("sent a speed value");
             thConnect.write("2" + sbSpeed.getProgress() );
         }
     }
