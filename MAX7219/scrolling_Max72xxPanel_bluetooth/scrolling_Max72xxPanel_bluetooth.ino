@@ -124,7 +124,7 @@ bool readBuletooth(){
     char indicator = Bluetooth.read();   // Starts reading the serial port, the first byte from the incoming data
     Serial.write( indicator );
     // If we have pressed the "Send" button from the Android App, clear the previous text
-    if (indicator == '1') {
+    if (indicator == '\1') {
      char message[128];
       int cnt = 0;
       for (int i = 0; i < 100; i++) {
@@ -141,7 +141,7 @@ bool readBuletooth(){
       catcall();
     }
     // Adjusting the Scrolling Speed
-    else if (indicator == '2') {
+    else if (indicator == '\2') {
       String sS = Bluetooth.readString();
       wait = sS.toInt(); // Milliseconds, subtraction because lower value means higher scrolling speed
       wait = wait < 0 ? 0 : ( wait > 100 ? 100 : wait);
@@ -151,7 +151,7 @@ bool readBuletooth(){
       ohhh();
     }
     // Adjusting the brightness
-    else if (indicator == '3') {
+    else if (indicator == '\3') {
       String sB = Bluetooth.readString();
       brightness = sB.toInt();
       matrix.setIntensity(brightness); // Use a value between 0 and 15 for brightness
