@@ -11,19 +11,23 @@ import android.os.Handler;
 import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.Console;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
+import java.util.Arrays;
 import java.util.Set;
 import java.util.UUID;
 
@@ -36,18 +40,24 @@ public class MainActivity extends AppCompatActivity {
     private BluetoothSocket  BTSocket = null;
     private Set<BluetoothDevice> PairedDevices;
     private ArrayAdapter<String> BTArrayAdapter;
-    private ListView lvDevices;
 
     private SeekBar sbBright;
     private SeekBar sbSpeed;
     private TextView txtMessage;
 
-    Button btScan;
-    Button btOff;
-    Button btOn;
-    Button btPaired;
-    Button btFind;
+
+    Button btMsg;
+    Button btSpeed;
+    Button btBright;
+
+
     ListView lvBluetooth;
+
+    byte cmd_text = '\1';
+    byte cmd_speed = '\2';
+    byte cmd_bright = '\3';
+
+    byte[] bufMsg = new byte [512];
 
     private Handler hMain;
     private ConnectedThread thConnect;
@@ -68,6 +78,10 @@ public class MainActivity extends AppCompatActivity {
         txtMessage = (TextView)findViewById(R.id.txtMessage);
         sbBright = (SeekBar)findViewById(R.id.sbBright);
         sbSpeed = (SeekBar)findViewById(R.id.sbSpeed);
+
+        btMsg = (Button)findViewById(R.id.btnSend) ;
+        btBright = (Button)findViewById(R.id.btBright) ;
+        btSpeed = (Button)findViewById(R.id.btSpeed) ;
 
         BTArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1);
         BTAdapter = BluetoothAdapter.getDefaultAdapter();
@@ -111,22 +125,22 @@ public class MainActivity extends AppCompatActivity {
 
     public void onClickSend(View view) {
         if(thConnect != null){
-            txtStatus.setText("sent '"+ txtMessage.getText());
-            thConnect.write("1" + txtMessage.getText());
+            Toast.makeText(getApplicationContext(), "Send "+ txtMessage.getText().toString(), Toast.LENGTH_LONG ).show();
+            thConnect.write(cmd_text, txtMessage.getText().toString());
         }
     }
 
     public void onClickBright(View view) {
         if(thConnect != null){
-            txtStatus.setText("sent a bright value");
-            thConnect.write("3" + sbBright.getProgress() );
+            Toast.makeText(getApplicationContext(), "Bright : "+ sbBright.getProgress(), Toast.LENGTH_LONG ).show();
+            thConnect.write(cmd_bright, Integer.toString(sbBright.getProgress()));
         }
     }
 
     public void onClickSpeed(View view) {
         if(thConnect != null){
-            txtStatus.setText("sent a speed value");
-            thConnect.write("2" + sbSpeed.getProgress() );
+            Toast.makeText(getApplicationContext(), "Speed : "+ sbSpeed.getProgress(), Toast.LENGTH_LONG ).show();
+            thConnect.write(cmd_speed, Integer.toString(sbSpeed.getProgress()));
         }
     }
 
@@ -296,11 +310,37 @@ public class MainActivity extends AppCompatActivity {
         }
 
         /* Call this from the main activity to send data to the remote device */
-        public void write(String input) {
-            byte[] bytes = input.getBytes();           //converts entered String into bytes
+        public void write(byte cmd, String Msg) {
+            byte [] data = Msg.getBytes();
+            bufMsg[0] = cmd;
+            if(((CheckBox)findViewById(R.id.ckSound)).isChecked())  bufMsg[1] = '1';
+                else    bufMsg[1] = '0';
+            Log.d("BT_MSG", Integer.toString(bufMsg[1]));
+            for(int i = 0; i < data.length; i++){
+                bufMsg[i+2] = data[i];
+            }
+            bufMsg[data.length+2] = 0;
             try {
-                mmOutStream.write(bytes);
+                mmOutStream.write(bufMsg);
             } catch (IOException e) { }
+
+
+            delayButtons();
+        }
+
+        public void delayButtons(){
+            btMsg.setEnabled(false);
+            btBright.setEnabled(false);
+            btSpeed.setEnabled(false);
+            Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    btMsg.setEnabled(true);
+                    btBright.setEnabled(true);
+                    btSpeed.setEnabled(true);
+                }
+            }, 4000);
         }
 
         /* Call this from the main activity to shutdown the connection */

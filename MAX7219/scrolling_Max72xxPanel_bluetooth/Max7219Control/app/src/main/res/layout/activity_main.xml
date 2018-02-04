@@ -36,20 +36,16 @@
         android:id="@+id/txtStatus"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:text="Bluetooth Status"
-        app:layout_constraintTop_toTopOf="parent"
         android:layout_marginLeft="16dp"
-        app:layout_constraintLeft_toLeftOf="parent" />
+        android:text="Bluetooth Status"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
         android:text="Message"
         android:textStyle="bold"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -57,28 +53,25 @@
 
     <EditText
         android:id="@+id/txtMessage"
-        android:layout_width="277dp"
+        android:layout_width="260dp"
         android:layout_height="45dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="5dp"
+        android:layout_marginLeft="16dp"
         android:ems="10"
         android:inputType="textPersonName"
+        android:maxLength="60"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
 
     <Button
         android:id="@+id/btnSend"
-        android:layout_width="75dp"
-        android:layout_height="43dp"
-        android:layout_marginLeft="0dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginTop="4dp"
+        android:layout_width="74dp"
+        android:layout_height="40dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginStart="5dp"
         android:onClick="onClickSend"
         android:text="SEND"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintLeft_toRightOf="@+id/txtMessage"
-        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/txtMessage"
         app:layout_constraintTop_toBottomOf="@+id/textView"
         tools:ignore="MissingConstraints" />
 
@@ -96,30 +89,26 @@
 
     <SeekBar
         android:id="@+id/sbBright"
-        android:layout_width="262dp"
-        android:layout_height="22dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="0dp"
+        android:layout_width="230dp"
+        android:layout_height="24dp"
         android:max="15"
         android:progress="7"
-        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/textView4"
         app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
     <Button
         android:id="@+id/btBright"
-        android:layout_width="78dp"
-        android:layout_height="39dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_width="74dp"
+        android:layout_height="40dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="12dp"
         android:onClick="onClickBright"
-        android:text="Apply"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtMessage"
-        tools:ignore="MissingConstraints"
-        app:layout_constraintLeft_toRightOf="@+id/sbBright"
-        android:layout_marginLeft="8dp"
-        app:layout_constraintHorizontal_bias="0.538" />
+        android:text="SEND"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/textView7"
+        app:layout_constraintTop_toBottomOf="@+id/btnSend"
+        tools:ignore="MissingConstraints" />
 
     <TextView
         android:id="@+id/textView3"
@@ -135,101 +124,137 @@
 
     <SeekBar
         android:id="@+id/sbSpeed"
-        android:layout_width="262dp"
-        android:layout_height="19dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="7dp"
+        android:layout_width="230dp"
+        android:layout_height="20dp"
         android:max="100"
         android:progress="50"
-        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/textView6"
         app:layout_constraintTop_toBottomOf="@+id/textView3" />
 
     <Button
         android:id="@+id/btSpeed"
         android:layout_width="74dp"
-        android:layout_height="38dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginTop="24dp"
+        android:layout_height="40dp"
+        android:layout_marginEnd="28dp"
+        android:layout_marginRight="24dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="12dp"
         android:onClick="onClickSpeed"
-        android:text="Apply"
-        app:layout_constraintHorizontal_bias="0.529"
-        app:layout_constraintLeft_toRightOf="@+id/sbSpeed"
+        android:text="SEND"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sbBright"
+        app:layout_constraintStart_toEndOf="@+id/textView8"
+        app:layout_constraintTop_toBottomOf="@+id/btBright"
         tools:ignore="MissingConstraints" />
 
     <Button
         android:id="@+id/btBlueOn"
-        android:layout_width="149dp"
-        android:layout_height="37dp"
-        android:text="BLUETOOTH ON"
+        android:layout_width="160dp"
+        android:layout_height="40dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="12dp"
         android:onClick="onClickBluetoothOn"
-        android:layout_marginStart="27dp"
-        android:layout_marginLeft="27dp"
+        android:text="BLUETOOTH ON"
         app:layout_constraintLeft_toLeftOf="parent"
-        android:layout_marginTop="8dp"
         app:layout_constraintTop_toBottomOf="@+id/textView5" />
 
     <Button
         android:id="@+id/btBlueOff"
-        android:layout_width="143dp"
+        android:layout_width="160dp"
         android:layout_height="40dp"
-        android:layout_marginEnd="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
-        android:layout_marginStart="35dp"
+        android:layout_marginTop="8dp"
         android:onClick="onClickBluetoothOff"
         android:text="BLUETOOTH OFF"
         app:layout_constraintLeft_toRightOf="@+id/btBlueOn"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintHorizontal_bias="0.836"
-        android:layout_marginTop="8dp"
         app:layout_constraintTop_toBottomOf="@+id/txtReceive" />
 
     <Button
         android:id="@+id/btPaired"
-        android:layout_width="166dp"
-        android:layout_height="44dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
+        android:layout_width="160dp"
+        android:layout_height="40dp"
+        android:layout_marginLeft="16dp"
         android:layout_marginTop="8dp"
         android:onClick="onCLickPaired"
         android:text="SHOW PAIRED"
-        app:layout_constraintHorizontal_bias="0.039"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btBlueOn"
         tools:ignore="MissingConstraints" />
 
     <Button
         android:id="@+id/btFind"
         android:layout_width="160dp"
-        android:layout_height="42dp"
-        android:layout_marginTop="5dp"
+        android:layout_height="40dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
         android:onClick="onClickBluetoothFind"
         android:text="FIND NEW DEVICES"
-        app:layout_constraintTop_toBottomOf="@+id/btBlueOff"
-        tools:ignore="MissingConstraints"
-        android:layout_marginRight="8dp"
+        app:layout_constraintLeft_toRightOf="@+id/btPaired"
         app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginLeft="8dp"
-        app:layout_constraintHorizontal_bias="0.692"
-        app:layout_constraintLeft_toRightOf="@+id/btPaired" />
+        app:layout_constraintTop_toBottomOf="@+id/btBlueOff"
+        tools:ignore="MissingConstraints" />
 
     <ListView
         android:id="@+id/lvBluetooth"
-        android:layout_width="357dp"
-        android:layout_height="187dp"
+        android:layout_width="389dp"
+        android:layout_height="225dp"
         android:layout_marginBottom="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
-        android:layout_marginTop="0dp"
+        android:layout_marginTop="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.545"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btFind"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toBottomOf="@+id/btPaired"
+        app:layout_constraintVertical_bias="0.119" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="15dp"
+        android:layout_height="26dp"
+        android:layout_marginStart="16dp"
+        android:text="—"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView2" />
+
+    <TextView
+        android:id="@+id/textView6"
+        android:layout_width="15dp"
+        android:layout_height="26dp"
+        android:layout_marginStart="16dp"
+        android:text="—"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView3" />
+
+    <TextView
+        android:id="@+id/textView7"
+        android:layout_width="15dp"
+        android:layout_height="26dp"
+        android:layout_marginTop="18dp"
+        android:text="┼"
+        app:layout_constraintStart_toEndOf="@+id/sbBright"
+        app:layout_constraintTop_toBottomOf="@+id/txtMessage" />
+
+    <TextView
+        android:id="@+id/textView8"
+        android:layout_width="15dp"
+        android:layout_height="26dp"
+        android:layout_marginTop="24dp"
+        android:text="┼"
+        app:layout_constraintStart_toEndOf="@+id/sbSpeed"
+        app:layout_constraintTop_toBottomOf="@+id/sbBright" />
+
+    <CheckBox
+        android:id="@+id/ckSound"
+        android:layout_width="87dp"
+        android:layout_height="28dp"
+        android:layout_marginEnd="36dp"
+        android:checked="true"
+        android:text="Sound"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtStatus" />
 
 </android.support.constraint.ConstraintLayout>
