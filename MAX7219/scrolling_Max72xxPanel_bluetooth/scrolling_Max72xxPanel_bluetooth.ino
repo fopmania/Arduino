@@ -1,5 +1,6 @@
 
 #include <SPI.h>
+#include <EEPROM.h>
 #include <Adafruit_GFX.h>
 #include <Max72xxPanel.h>
 #include <SoftwareSerial.h>
@@ -10,6 +11,14 @@
 #define PIN_TX 2
 #define PIN_RX 3  
 #define PIN_SPEAKER 8 
+
+#define ADDR_EEPROM_BRIGHT   0
+#define ADDR_EEPROM_SPEED    1
+#define ADDR_EEPROM_TEXT_LEN   2
+#define ADDR_EEPROM_TEXT   3
+
+
+
 /*  AT commands.
 1. AT+NAME=CSK // (YOUR NAME)
 
@@ -32,18 +41,20 @@
 AT+ROLE?
 AT+VERSION?
 */
-int numberOfHorizontalDisplays = 4;
-int numberOfVerticalDisplays = 1;
+const int numberOfHorizontalDisplays = 4;
+const int numberOfVerticalDisplays = 1;
 
 Max72xxPanel matrix = Max72xxPanel(PIN_CS, numberOfHorizontalDisplays, numberOfVerticalDisplays);
 SoftwareSerial Bluetooth(PIN_TX, PIN_RX); // D2:TX D3:RX
 
-String tape = "Jun Kim";
-int wait = 20; // In milliseconds
+String tape = "***** JUNBO *****";
+int wait = 20; // In milliseconds.  It's scoll speed.
+int brightness = 7;
+
 
 int spacer = 1;
 int width = 5 + spacer; // The font width is 5 pixels
-int brightness = 7;
+
 
 //  buzzer sound  
 
@@ -99,8 +110,9 @@ void ohhh() {
 
 
 void setup() {
-  Serial.begin(38400);
+  Serial.begin(9600);
   Bluetooth.begin(38400); // Default communication rate of the Bluetooth module
+  clearBluetoothBuffer();
 
   matrix.setIntensity(brightness); // Use a value between 0 and 15 for brightness
   pinMode(PIN_SPEAKER, OUTPUT);
@@ -117,48 +129,95 @@ void setup() {
   matrix.setRotation(1, 1);    // The same hold for the last display
   matrix.setRotation(2, 1);    // The same hold for the last display
   matrix.setRotation(3, 1);    // The same hold for the last display
+
+  renderText();
+
+//  writeInfToEEPROM();
+  readInfoFromEEPROM();
+  matrix.setIntensity(brightness); // Use a value between 0 and 15 for brightness
+}
+
+
+void readInfoFromEEPROM(){
+  brightness = EEPROM.read(ADDR_EEPROM_BRIGHT);
+  Serial.print("Brightness : ");
+  Serial.println(brightness);
+  wait = EEPROM.read(ADDR_EEPROM_SPEED);
+  Serial.print("Scroll Speed : ");
+  Serial.println(wait);
+  
+  int len = EEPROM.read(ADDR_EEPROM_TEXT_LEN);
+  Serial.print("Text Len : ");
+  Serial.println(len);
+  tape = "";
+  for(int i = 0; i < len; i++){
+    char ch = EEPROM.read(ADDR_EEPROM_TEXT + i);
+    Serial.print(ch);
+    tape += String(ch);
+  }
+}
+
+void writeInfoToEEPROM(){
+  EEPROM.write(ADDR_EEPROM_BRIGHT, brightness);
+  EEPROM.write(ADDR_EEPROM_SPEED, wait);
+  
+  EEPROM.write(ADDR_EEPROM_TEXT_LEN, tape.length());
+  for(int i = 0; i < tape.length(); i++){
+    EEPROM.write(ADDR_EEPROM_TEXT + i, tape.charAt(i));
+  }
+}
+
+String getStringFromBluetooth(){
+  String out ="";      
+  while(Bluetooth.available()){
+    char ch = Bluetooth.read();
+    if(ch == 0 )  break;
+    out += String(ch); 
+  }
+  return out;
 }
 
 bool readBuletooth(){
   if (Bluetooth.available()) {   // Checks whether data is comming from the serial port
     byte indicator = Bluetooth.read();   // Starts reading the serial port, the first byte from the incoming data
-    Serial.write( indicator );
-    // If we have pressed the "Send" button from the Android App, clear the previous text
+    byte isSound = Bluetooth.read();   // Starts reading the serial port, the first byte from the incoming data
     if (indicator == '\1') {
-     char message[128];
-      int cnt = 0;
-      for (int i = 0; i < 100; i++) {
-        message[i] = 0;
-        matrix.fillScreen(0);
+      tape = getStringFromBluetooth();
+      EEPROM.write(ADDR_EEPROM_TEXT_LEN, tape.length());
+      for(int i = 0; i < tape.length(); i++){
+        EEPROM.write(ADDR_EEPROM_TEXT + i, tape.charAt(i));
       }
-      // Read the whole data/string comming from the phone and put it into text[] array.
-//      String sS = Bluetooth.readString();
-//      while (Bluetooth.available()) {
-//        message[cnt] = Bluetooth.read();
-//        cnt++;
-//      }
-      tape = Bluetooth.readString();
+  
+      Serial.print( "Text Length is ");
+      Serial.println( tape.length() );
       Serial.println( tape );
-      catcall();
+      if(isSound == '1') catcall();
+      Bluetooth.println( tape );
     }
     // Adjusting the Scrolling Speed
     else if (indicator == '\2') {
-      String sS = Bluetooth.readString();
+      String sS = getStringFromBluetooth();
+//      String sS = Bluetooth.readString();
       wait = sS.toInt(); // Milliseconds, subtraction because lower value means higher scrolling speed
       wait = wait < 0 ? 0 : ( wait > 100 ? 100 : wait);
       wait = 100 - wait; 
-      Serial.println( sS );
-//      Serial.write( wait );
-      ohhh();
+
+      EEPROM.write(ADDR_EEPROM_SPEED, wait);
+      
+      Serial.println( "Speed : " + sS );
+      Bluetooth.println( "Speed : " + sS );
+      if(isSound == '1') ohhh();
     }
     // Adjusting the brightness
     else if (indicator == '\3') {
-      String sB = Bluetooth.readString();
+      String sB = getStringFromBluetooth();
+//      String sB = Bluetooth.readString();
       brightness = sB.toInt();
       matrix.setIntensity(brightness); // Use a value between 0 and 15 for brightness
-      Serial.println( sB );
-//      Serial.write( brightness );
-      squeak();
+      EEPROM.write(ADDR_EEPROM_BRIGHT, brightness);
+      Serial.println( "Bright : " + sB );
+      Bluetooth.println( "Bright : " + sB);
+      if(isSound == '1') squeak();
     }
     return true;
   }
@@ -168,10 +227,19 @@ bool readBuletooth(){
   return false;
 }
 
+
+void clearBluetoothBuffer(){
+    while (Bluetooth.available()>0) {
+      Bluetooth.read();
+    }
+}
+
 void loop() {
   if(readBuletooth()) return;
+  renderText();
+}
 
-
+void renderText(){
   for ( int i = 0 ; i < width * tape.length() + matrix.width() - 1 - spacer; i++ ) {
 
     matrix.fillScreen(LOW);
@@ -188,7 +256,6 @@ void loop() {
       letter--;
       x -= width;
     }
-
     matrix.write(); // Send bitmap to display
 
     delay(wait);
