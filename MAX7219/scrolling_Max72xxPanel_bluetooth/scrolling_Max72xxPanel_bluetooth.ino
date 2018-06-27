@@ -180,6 +180,7 @@ String getStringFromBluetooth(){
 bool readBuletooth(){
   if (Bluetooth.available()) {   // Checks whether data is comming from the serial port
     byte indicator = Bluetooth.read();   // Starts reading the serial port, the first byte from the incoming data
+    if(!Bluetooth.available())  return false;
     byte isSound = Bluetooth.read();   // Starts reading the serial port, the first byte from the incoming data
     if (indicator == '\1') {
       tape = getStringFromBluetooth();
@@ -219,6 +220,14 @@ bool readBuletooth(){
       Bluetooth.println( "Bright : " + sB);
       if(isSound == '1') squeak();
     }
+    else{
+      char buf[3] = ""; 
+      buf[0] = indicator;
+      buf[1] = isSound;
+      //Bluetooth.write( printf("%c%c%s", indicator, isSound, Serial.read() ) );
+      Serial.println( buf + getStringFromBluetooth() );
+    }
+    
     return true;
   }
   if ( Serial.available() ) {
