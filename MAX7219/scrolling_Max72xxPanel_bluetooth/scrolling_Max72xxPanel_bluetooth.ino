@@ -180,7 +180,12 @@ String getStringFromBluetooth(){
 bool readBuletooth(){
   if (Bluetooth.available()) {   // Checks whether data is comming from the serial port
     byte indicator = Bluetooth.read();   // Starts reading the serial port, the first byte from the incoming data
-    if(!Bluetooth.available())  return false;
+    if(!Bluetooth.available()){
+      char buf[2] = ""; 
+      buf[0] = indicator;
+      Serial.println(buf);
+      return false;
+    }
     byte isSound = Bluetooth.read();   // Starts reading the serial port, the first byte from the incoming data
     if (indicator == '\1') {
       tape = getStringFromBluetooth();
